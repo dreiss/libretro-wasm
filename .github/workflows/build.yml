@@ -1,0 +1,37 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  snes9x:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write   # to create releases on tags
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build
+        run: cores/snes9x/build.sh dist/snes9x
+      - name: Smoke test
+        run: node test/smoke.mjs dist/snes9x
+      - uses: actions/upload-artifact@v4
+        with:
+          name: snes9x
+          path: dist/snes9x
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/snes9x/* \
+            --title "$GITHUB_REF_NAME" \
+            --notes "snes9x libretro core as a standalone WebAssembly module. SHA-256 sums in SHA256SUMS. snes9x's license (LICENSE.snes9x) applies to the binaries."

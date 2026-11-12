@@ -61,6 +61,15 @@ Other host platforms (macOS, Windows, ARM) have not been checked.
 CI (`.github/workflows/build.yml`) builds and smoke-tests every push.
 A `v*` tag also publishes the `dist/snes9x` files as a GitHub release.
 
+To put the releases on GitHub Pages,
+run the `pages` workflow by hand after a release
+(Actions tab > pages > Run workflow).
+It publishes every release's files at
+`https://dreiss.github.io/libretro-wasm/snes9x/<tag>/`.
+Each release keeps its own path, so a published file never changes.
+GitHub Pages sends `Access-Control-Allow-Origin: *`,
+so the files can be loaded from any origin.
+
 ## Using it
 
 ```js

@@ -1,0 +1,44 @@
+name: pages
+
+# Publish every release's files to GitHub Pages at /snes9x/<tag>/.
+# Run by hand after a release (Actions tab > pages > Run workflow).
+# A Pages deployment replaces the whole site,
+# so the site is rebuilt from all releases each time.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  site:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Collect every release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for tag in $(gh release list -R "$GITHUB_REPOSITORY" --limit 1000 \
+                         --exclude-drafts --json tagName --jq '.[].tagName'); do
+            gh release download "$tag" -R "$GITHUB_REPOSITORY" -D "site/snes9x/$tag"
+            (cd "site/snes9x/$tag" && sha256sum -c SHA256SUMS)
+          done
+          test -n "$(ls site/snes9x)"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  # A separate job, so "Re-run failed jobs" after a failed deploy
+  # reuses the uploaded site instead of uploading a second copy.
+  deploy:
+    needs: site
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

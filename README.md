@@ -50,6 +50,14 @@ node test/smoke.mjs dist/snes9x  # smoke test
 | `LICENSE.snes9x` | snes9x's license; it applies to the binaries |
 | `SHA256SUMS` | |
 
+The smoke test assembles a small SNES test program
+(`test/rom/test.s`, no game data) with `ca65` and `ld65`
+from [cc65](https://cc65.github.io/) (`apt install cc65`).
+Its memory, picture, and sound react to the joypad
+in simple, predictable ways,
+so the test checks that input, video, and audio really work,
+along with determinism and save states.
+
 The build is reproducible:
 rebuilding from a clean state, from a checkout at a different path,
 or on a different machine gives byte-identical files.

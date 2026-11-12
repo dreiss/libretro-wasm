@@ -51,7 +51,7 @@ node test/smoke.mjs dist/snes9x  # smoke test
 | `SHA256SUMS` | |
 
 The smoke test assembles a small SNES test program
-(`test/rom/test.s`, no game data) with `ca65` and `ld65`
+(`test/rom_snes/test.s`, no game data) with `ca65` and `ld65`
 from [cc65](https://cc65.github.io/) (`apt install cc65`).
 Its memory, picture, and sound react to the joypad
 in simple, predictable ways,

@@ -1,6 +1,6 @@
 // Smoke test for a built core: node test/smoke.mjs dist/snes9x
 //
-// Assembles test/rom/test.s (with ca65 and ld65, from cc65)
+// Assembles test/rom_snes/test.s (with ca65 and ld65, from cc65)
 // into a 32 KiB SNES test program (no game data)
 // whose memory, picture, and sound react to the joypad
 // in simple, predictable ways (see test.s).
@@ -20,7 +20,7 @@ const dist = process.argv[2] || "dist/snes9x";
 const { default: createCore } = await import(pathToFileURL(path.resolve(dist, "snes9x_core.mjs")).href);
 
 function assembleTestRom() {
-  const src = path.join(path.dirname(fileURLToPath(import.meta.url)), "rom");
+  const src = path.join(path.dirname(fileURLToPath(import.meta.url)), "rom_snes");
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "libretro-wasm-test-"));
   try {
     execFileSync("ca65", ["-o", path.join(tmp, "test.o"), path.join(src, "test.s")], { stdio: "inherit" });

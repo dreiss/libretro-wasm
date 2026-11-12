@@ -24,7 +24,7 @@ jobs:
             (cd "site/snes9x/$tag" && sha256sum -c SHA256SUMS)
           done
           test -n "$(ls site/snes9x)"
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
 
@@ -41,4 +41,4 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

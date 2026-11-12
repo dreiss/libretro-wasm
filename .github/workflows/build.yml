@@ -15,15 +15,15 @@ jobs:
     permissions:
       contents: write   # to create releases on tags
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
       - name: Build
         run: cores/snes9x/build.sh dist/snes9x
       - name: Smoke test
         run: node test/smoke.mjs dist/snes9x
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: snes9x
           path: dist/snes9x
